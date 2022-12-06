@@ -25,15 +25,15 @@ void setup()
   size(1200, 800, P3D);
  
   /*====== Load Animations ======*/
-  monsterAnim = ReadAnimationFromFile("monster.txt");
-  sphereAnim = ReadAnimationFromFile("sphere.txt");
+  //monsterAnim = ReadAnimationFromFile("monster.txt");
+  //sphereAnim = ReadAnimationFromFile("sphere.txt");
 
-  monsterForward.SetAnimation(monsterAnim);
-  monsterReverse.SetAnimation(monsterAnim);
-  monsterSnap.SetAnimation(monsterAnim);  
-  monsterSnap.SetFrameSnapping(true);
+  //monsterForward.SetAnimation(monsterAnim);
+  //monsterReverse.SetAnimation(monsterAnim);
+  //monsterSnap.SetAnimation(monsterAnim);  
+  //monsterSnap.SetFrameSnapping(true);
 
-  sphereForward.SetAnimation(sphereAnim);
+  //sphereForward.SetAnimation(sphereAnim);
 
   /*====== Create Animations For Cubes ======*/
   // When initializing animations, to offset them
