@@ -173,14 +173,14 @@ void DrawGrid()
   // TODO: Draw the grid
   // Dimensions: 200x200 (-100 to +100 on X and Z)
   stroke(255);
-  for (int i = -200; i <= 200; i+= 10)
+  for (int i = -100; i <= 100; i+= 10)
   {
-    line(i, 0, -200, i, 0, 200);
+    line(i, 0, -100, i, 0, 100);
     
-    line(-200, 0, i, 200, 0, i);
+    line(-100, 0, i, 100, 0, i);
   }
   stroke(255, 0, 0);
-  line(-200, 0, 0, 200, 0, 0);
+  line(-100, 0, 0, 100, 0, 0);
   stroke(0, 255, 0);
-  line(0, 0, -200, 0, 0, 200);
+  line(0, 0, -100, 0, 0, 100);
 }
