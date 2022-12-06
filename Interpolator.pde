@@ -23,7 +23,8 @@ abstract class Interpolator
     // TODO: Update the current time
     // Check to see if the time is out of bounds (0 / Animation_Duration)
     // If so, adjust by an appropriate amount to loop correctly
-    
+    float timePerFrame = 1/60f;
+    currentTime += timePerFrame;
   }
   
   // Implement this in derived classes
