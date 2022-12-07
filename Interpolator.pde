@@ -23,9 +23,19 @@ abstract class Interpolator
     // TODO: Update the current time
     // Check to see if the time is out of bounds (0 / Animation_Duration)
     // If so, adjust by an appropriate amount to loop correctly
-    float timePerFrame = 1/60f;
-    float playback = time;
-    currentTime += timePerFrame * playback;
+    float dur = animation.GetDuration();
+    if (currentTime + time < 0)
+    {
+      currentTime = dur;
+    }
+    else if (currentTime + time > dur)
+    {
+      currentTime = 0;
+    }
+    else
+    {
+      currentTime += time;
+    }
   }
   
   // Implement this in derived classes
@@ -51,6 +61,31 @@ class ShapeInterpolator extends Interpolator
   {
     // TODO: Create a new PShape by interpolating between two existing key frames
     // using linear interpolation
+    UpdateTime(time);
+   // First find two key frames
+   KeyFrame prev, next;
+   if (time > 0)
+   {
+     // go forward
+     // If at time zero, use last keyframe as prev
+     if (currentTime == 0)
+     {
+       prev = animation.keyFrames.get(animation.keyFrames.size() - 1);
+       next = animation.keyFrames.get(0);
+     }
+     else
+     {
+       for (int i = 0; animation.keyFrames.get(i).time > currentTime; i++)
+       {
+         prev = animation.keyFrames.get(i);
+         next = (i+1 == animation.keyFrames.size()) ? animation.keyFrames(0) : animation.keyFrames.get(i+1);
+       }
+     }
+   }
+   else
+   {
+     // go backward
+   }
   }
 }
 
