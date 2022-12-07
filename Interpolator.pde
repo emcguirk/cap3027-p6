@@ -159,9 +159,27 @@ class PositionInterpolator extends Interpolator
 {
   PVector currentPosition;
 
-  void Update(float time)
+  void Update(float time) //<>//
   {
     // The same type of process as the ShapeInterpolator class... except
     // this only operates on a single point
+    UpdateTime(time);
+    KeyFrame prev = null;
+    KeyFrame next = null;
+    float ratio = 0;
+    for (int i = 0; i < animation.keyFrames.size(); i++)
+    {
+      if (currentTime >= animation.keyFrames.get(i).time && currentTime <= animation.keyFrames.get(i+1).time)
+      {
+        prev = animation.keyFrames.get(i);
+        next = animation.keyFrames.get(i+1);
+        ratio = abs(currentTime - prev.time)/abs(next.time - prev.time);
+      }
+    }
+    float x, y, z;
+    x = lerp(prev.points.get(0).x, next.points.get(0).x, ratio);
+    y = 0;
+    z = lerp(prev.points.get(0).z, next.points.get(0).z, ratio);
+    currentPosition = new PVector(x, y, z);
   }
 }

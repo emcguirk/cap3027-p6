@@ -1,4 +1,4 @@
-// VertexAnimation Project - Student Version //<>//
+// VertexAnimation Project - Student Version
 import java.io.*;
 import java.util.*;
 
@@ -17,22 +17,20 @@ PositionInterpolator spherePosition = new PositionInterpolator();
 // TODO: Create animations for interpolators
 ArrayList<PositionInterpolator> cubes = new ArrayList<PositionInterpolator>();
 
-ArrayList<Animation> cubeAnims = new ArrayList<Animation>();
-
 OrbitCamera oCamera;
 
 void setup()
 {
   pixelDensity(2);
   size(1200, 800, P3D);
- 
+
   /*====== Load Animations ======*/
   monsterAnim = ReadAnimationFromFile("monster.txt");
   sphereAnim = ReadAnimationFromFile("sphere.txt");
 
   monsterForward.SetAnimation(monsterAnim);
   monsterReverse.SetAnimation(monsterAnim);
-  monsterSnap.SetAnimation(monsterAnim);  
+  monsterSnap.SetAnimation(monsterAnim);
   monsterSnap.SetFrameSnapping(true);
 
   sphereForward.SetAnimation(sphereAnim);
@@ -42,18 +40,9 @@ void setup()
   // you can "initialize" them by calling Update()
   // with a time value update. Each is 0.1 seconds
   // ahead of the previous one
-  
-  /*====== Create Animations For Spheroid ======*/
-  Animation spherePos = new Animation();
-  // Create and set keyframes
-  spherePosition.SetAnimation(spherePos);
-  
-  oCamera = new OrbitCamera();
-  
-  /*===== Create animation for cubes =====*/
   for (int i = 0; i < 11; i++)
   {
-    Animation cube = new Animation();
+    Animation cube = new Animation(); //<>//
     for (int j = 0; j < 4; j++)
     {
       KeyFrame kf = new KeyFrame();
@@ -68,16 +57,22 @@ void setup()
       kf.time = j * 0.5;
       cube.keyFrames.add(kf);
     }
-    cubeAnims.add(cube);
+    PositionInterpolator cubeLerp = new PositionInterpolator();
+    cubeLerp.SetAnimation(cube);
+    cubeLerp.Update(0.1 * i); //<>//
+    cubes.add(cubeLerp);
   }
+
+  /*====== Create Animations For Spheroid ======*/
+  Animation spherePos = new Animation();
+  // Create and set keyframes
+  spherePosition.SetAnimation(spherePos);
+
+  oCamera = new OrbitCamera();
   
-  for (Animation a : cubeAnims)
-  {
-    println(a.keyFrames.get(0).points.get(0).x, a.keyFrames.get(0).points.get(0).y, a.keyFrames.get(0).points.get(0).z);
-  }
 }
 
-void draw()
+void draw() //<>//
 {
   lights();
   background(0);
@@ -95,7 +90,7 @@ void draw()
   monsterForward.Update(playbackSpeed);
   shape(monsterForward.currentShape);
   popMatrix();
-  
+
   ///*====== Draw Reverse Monster ======*/
   pushMatrix();
   translate(40, 0, 0);
@@ -103,7 +98,7 @@ void draw()
   monsterReverse.Update(-playbackSpeed);
   shape(monsterReverse.currentShape);
   popMatrix();
-  
+
   ///*====== Draw Snapped Monster ======*/
   pushMatrix();
   translate(0, 0, -60);
@@ -111,20 +106,30 @@ void draw()
   monsterSnap.Update(playbackSpeed);
   shape(monsterSnap.currentShape);
   popMatrix();
-  
+
   ///*====== Draw Spheroid ======*/
-  spherePosition.Update(playbackSpeed);
-  sphereForward.fillColor = color(39, 110, 190);
-  sphereForward.Update(playbackSpeed);
-  PVector pos = spherePosition.currentPosition;
-  pushMatrix();
-  //translate(pos.x, pos.y, pos.z);
-  shape(sphereForward.currentShape);
-  popMatrix();
-  
+  //spherePosition.Update(playbackSpeed);
+  //sphereForward.fillColor = color(39, 110, 190);
+  //sphereForward.Update(playbackSpeed);
+  //PVector pos = spherePosition.currentPosition;
+  //pushMatrix();
+  ////translate(pos.x, pos.y, pos.z);
+  //shape(sphereForward.currentShape);
+  //popMatrix();
+
   /*====== TODO: Update and draw cubes ======*/
-  // For each interpolator, update/draw
-  
+  for (int i = 0; i < cubes.size(); i++)
+  {
+    cubes.get(i).Update(playbackSpeed);
+    color c = (i%2 == 0) ? color(255, 0, 0) : color(255, 255, 0);
+    fill(c);
+    PVector pos = cubes.get(i).currentPosition;
+    pushMatrix();
+    translate(pos.x, pos.y, pos.z);
+    box(10);
+    popMatrix();
+  }
+
   perspective();
 }
 
@@ -139,9 +144,9 @@ void mouseWheel(MouseEvent event)
 void mouseDragged() {
   float deltaX = (mouseX - pmouseX) * 0.15f;
   float deltaY = (mouseY - pmouseY) * 0.15f;
-  
+
   oCamera.phi += deltaX;
-  
+
   float newTheta = oCamera.theta + deltaY;
   if (newTheta < 0) {
     oCamera.theta = 0;
@@ -187,7 +192,7 @@ Animation ReadAnimationFromFile(String fileName)
   {
     ex.printStackTrace();
   }
- 
+
   return animation;
 }
 
@@ -199,7 +204,7 @@ void DrawGrid()
   for (int i = -100; i <= 100; i+= 10)
   {
     line(i, 0, -100, i, 0, 100);
-    
+
     line(-100, 0, i, 100, 0, i);
   }
   stroke(255, 0, 0);
