@@ -1,4 +1,4 @@
-abstract class Interpolator
+abstract class Interpolator //<>// //<>//
 {
   Animation animation;
 
@@ -64,42 +64,91 @@ class ShapeInterpolator extends Interpolator
     KeyFrame prev = null;
     KeyFrame next = null;
     float ratio = 0.0;
-    // Check if we're at the beginning
-    if (currentTime < animation.keyFrames.get(0).time) //<>//
+    if (time > 0)
     {
-      next = animation.keyFrames.get(0);
-      prev = animation.keyFrames.get(animation.keyFrames.size()-1);
-      ratio = currentTime/abs(next.time);
-    }
-    else
-    {
-      for (int i = 0; i < animation.keyFrames.size(); i++)
+      // Check if we're at the beginning
+      if (currentTime < animation.keyFrames.get(0).time) //<>//
       {
-        if (currentTime >= animation.keyFrames.get(i).time && currentTime <= animation.keyFrames.get(i+1).time)
+        next = animation.keyFrames.get(0);
+        prev = animation.keyFrames.get(animation.keyFrames.size()-1);
+        ratio = currentTime/abs(next.time);
+      } else
+      {
+        for (int i = 0; i < animation.keyFrames.size(); i++)
         {
-          prev = animation.keyFrames.get(i);
-          next = animation.keyFrames.get(i+1);
-          ratio = abs(currentTime - prev.time)/abs(next.time - prev.time);
+          if (currentTime >= animation.keyFrames.get(i).time && currentTime <= animation.keyFrames.get(i+1).time)
+          {
+            prev = animation.keyFrames.get(i);
+            next = animation.keyFrames.get(i+1);
+            ratio = abs(currentTime - prev.time)/abs(next.time - prev.time);
+          }
         }
       }
-    }
-    // Create shape
-    ArrayList<PVector> verts = new ArrayList<>(); //<>//
-    for (int i = 0; i < prev.points.size(); i++)
+      // Create shape
+      ArrayList<PVector> verts = new ArrayList<>(); //<>//
+      for (int i = 0; i < prev.points.size(); i++)
+      {
+        if (snapping)
+        {
+          verts.add(new PVector(prev.points.get(i).x, prev.points.get(i).y, prev.points.get(i).z));
+        } else
+        {
+          PVector v = new PVector();
+          v.x = lerp(prev.points.get(i).x, next.points.get(i).x, ratio);
+          v.y = lerp(prev.points.get(i).y, next.points.get(i).y, ratio);
+          v.z = lerp(prev.points.get(i).z, next.points.get(i).z, ratio);
+          verts.add(v);
+        }
+      }
+      currentShape = createShape();
+      currentShape.beginShape(TRIANGLE);
+      currentShape.fill(fillColor);
+      for (PVector v : verts)
+      {
+        currentShape.vertex(v.x, v.y, v.z);
+      }
+      currentShape.endShape();
+    } else
     {
-      PVector v = new PVector();
-      v.x = lerp(prev.points.get(i).x, next.points.get(i).x, ratio);
-      v.y = lerp(prev.points.get(i).y, next.points.get(i).y, ratio);
-      v.z = lerp(prev.points.get(i).z, next.points.get(i).z, ratio);
-      verts.add(v);
+      if (currentTime < animation.keyFrames.get(0).time)
+      {
+        next = animation.keyFrames.get(animation.keyFrames.size()-1);
+        prev = animation.keyFrames.get(0);
+        ratio = currentTime/abs(prev.time);
+      } else
+      {
+        for (int i = animation.keyFrames.size()-1; i >= 0; i--)
+        {
+          if (currentTime <= animation.keyFrames.get(i).time && currentTime >= animation.keyFrames.get(i-1).time)
+          {
+            prev = animation.keyFrames.get(i);
+            next = animation.keyFrames.get(i-1);
+            ratio = abs(currentTime - prev.time)/abs(next.time - prev.time);
+          }
+        }
+      }
+      // Create shape
+      ArrayList<PVector> verts = new ArrayList<>();
+      for (int i = 0; i < prev.points.size(); i++)
+      {
+        if (snapping) //<>//
+        {
+          verts.add(new PVector(prev.points.get(i).x, prev.points.get(i).y, prev.points.get(i).z));
+        }
+        PVector v = new PVector();
+        v.x = lerp(prev.points.get(i).x, next.points.get(i).x, ratio);
+        v.y = lerp(prev.points.get(i).y, next.points.get(i).y, ratio);
+        v.z = lerp(prev.points.get(i).z, next.points.get(i).z, ratio);
+        verts.add(v);
+      }
+      currentShape = createShape();
+      currentShape.beginShape(TRIANGLE);
+      for (PVector v : verts)
+      {
+        currentShape.vertex(v.x, v.y, v.z);
+      }
+      currentShape.endShape();
     }
-    currentShape = createShape();
-    currentShape.beginShape(TRIANGLE);
-    for (PVector v : verts)
-    {
-      currentShape.vertex(v.x, v.y, v.z);
-    }
-    currentShape.endShape();
   }
 }
 

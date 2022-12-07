@@ -29,9 +29,9 @@ void setup()
   //sphereAnim = ReadAnimationFromFile("sphere.txt");
 
   monsterForward.SetAnimation(monsterAnim);
-  monsterReverse.SetAnimation(monsterAnim);
-  monsterSnap.SetAnimation(monsterAnim);  
-  monsterSnap.SetFrameSnapping(true);
+  //monsterReverse.SetAnimation(monsterAnim);
+  //monsterSnap.SetAnimation(monsterAnim);  
+  //monsterSnap.SetFrameSnapping(true);
 
   //sphereForward.SetAnimation(sphereAnim);
 
@@ -58,7 +58,7 @@ void draw()
   perspective(radians(90f), width/(float)height, 0.1, 1000);
   DrawGrid();
 
-  float playbackSpeed = 0.005f;
+  float playbackSpeed = 0.01f;
 
   oCamera.Update();
 
@@ -71,20 +71,20 @@ void draw()
   popMatrix();
   
   ///*====== Draw Reverse Monster ======*/
-  pushMatrix();
-  translate(40, 0, 0);
-  monsterReverse.fillColor = color(220, 80, 45);
-  monsterReverse.Update(-playbackSpeed);
-  shape(monsterReverse.currentShape);
-  popMatrix();
+  //pushMatrix();
+  //translate(40, 0, 0);
+  //monsterReverse.fillColor = color(220, 80, 45);
+  //monsterReverse.Update(-playbackSpeed);
+  //shape(monsterReverse.currentShape);
+  //popMatrix();
   
   ///*====== Draw Snapped Monster ======*/
-  pushMatrix();
-  translate(0, 0, -60);
-  monsterSnap.fillColor = color(160, 120, 85);
-  monsterSnap.Update(playbackSpeed);
-  shape(monsterSnap.currentShape);
-  popMatrix();
+  //pushMatrix();
+  //translate(0, 0, -60);
+  //monsterSnap.fillColor = color(160, 120, 85);
+  //monsterSnap.Update(playbackSpeed);
+  //shape(monsterSnap.currentShape);
+  //popMatrix();
   
   ///*====== Draw Spheroid ======*/
   //spherePosition.Update(playbackSpeed);
