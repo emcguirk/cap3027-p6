@@ -1,23 +1,23 @@
 abstract class Interpolator
 {
   Animation animation;
-  
+
   // Where we at in the animation?
   float currentTime = 0;
-  
+
   // To interpolate, or not to interpolate... that is the question
   boolean snapping = false;
-  
+
   void SetAnimation(Animation anim)
   {
     animation = anim;
   }
-  
+
   void SetFrameSnapping(boolean snap)
   {
     snapping = snap;
   }
-  
+
   void UpdateTime(float time)
   {
     // TODO: Update the current time
@@ -27,17 +27,15 @@ abstract class Interpolator
     if (currentTime + time < 0)
     {
       currentTime = dur;
-    }
-    else if (currentTime + time > dur)
+    } else if (currentTime + time > dur)
     {
       currentTime = 0;
-    }
-    else
+    } else
     {
       currentTime += time;
     }
   }
-  
+
   // Implement this in derived classes
   // Each of those should call UpdateTime() and pass the time parameter
   // Call that function FIRST to ensure proper synching of animations
@@ -48,51 +46,67 @@ class ShapeInterpolator extends Interpolator
 {
   // The result of the data calculations - either snapping or interpolating
   PShape currentShape;
-  
+
   // Changing mesh colors
   color fillColor;
-  
+
   PShape GetShape()
   {
     return currentShape;
   }
-  
+
   void Update(float time)
   {
     // TODO: Create a new PShape by interpolating between two existing key frames
     // using linear interpolation
     UpdateTime(time);
-   // First find two key frames
-   KeyFrame prev, next;
-   if (time > 0)
-   {
-     // go forward
-     // If at time zero, use last keyframe as prev
-     if (currentTime == 0)
-     {
-       prev = animation.keyFrames.get(animation.keyFrames.size() - 1);
-       next = animation.keyFrames.get(0);
-     }
-     else
-     {
-       for (int i = 0; animation.keyFrames.get(i).time > currentTime; i++)
-       {
-         prev = animation.keyFrames.get(i);
-         next = (i+1 == animation.keyFrames.size()) ? animation.keyFrames(0) : animation.keyFrames.get(i+1);
-       }
-     }
-   }
-   else
-   {
-     // go backward
-   }
+    // First find two key frames
+    KeyFrame prev = null;
+    KeyFrame next = null;
+    float ratio = 0.0;
+    // Check if we're at the beginning
+    if (currentTime < animation.keyFrames.get(0).time) //<>//
+    {
+      next = animation.keyFrames.get(0);
+      prev = animation.keyFrames.get(animation.keyFrames.size()-1);
+      ratio = currentTime/abs(next.time);
+    }
+    else
+    {
+      for (int i = 0; i < animation.keyFrames.size(); i++)
+      {
+        if (currentTime >= animation.keyFrames.get(i).time && currentTime <= animation.keyFrames.get(i+1).time)
+        {
+          prev = animation.keyFrames.get(i);
+          next = animation.keyFrames.get(i+1);
+          ratio = abs(currentTime - prev.time)/abs(next.time - prev.time);
+        }
+      }
+    }
+    // Create shape
+    ArrayList<PVector> verts = new ArrayList<>(); //<>//
+    for (int i = 0; i < prev.points.size(); i++)
+    {
+      PVector v = new PVector();
+      v.x = lerp(prev.points.get(i).x, next.points.get(i).x, ratio);
+      v.y = lerp(prev.points.get(i).y, next.points.get(i).y, ratio);
+      v.z = lerp(prev.points.get(i).z, next.points.get(i).z, ratio);
+      verts.add(v);
+    }
+    currentShape = createShape();
+    currentShape.beginShape(TRIANGLE);
+    for (PVector v : verts)
+    {
+      currentShape.vertex(v.x, v.y, v.z);
+    }
+    currentShape.endShape();
   }
 }
 
 class PositionInterpolator extends Interpolator
 {
   PVector currentPosition;
-  
+
   void Update(float time)
   {
     // The same type of process as the ShapeInterpolator class... except

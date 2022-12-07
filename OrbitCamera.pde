@@ -15,20 +15,12 @@ class OrbitCamera {
     targets = new ArrayList<>();
     lookAtTarget = new PVector(0f, 0f, 0f);
 
-    radius = 20;
-    phi = 92f;
-    theta = 120f;
+    radius = 125;
+    phi = 118f;
+    theta = 125f;
   }
 
   void Update() {
-    //phi = map(mouseX, 0, width-1, 0, 360);
-    //theta = map(mouseY, 0, height-1, 1, 179);
-    
-    //cameraPosition.x = lookAtTarget.x + findX();
-    //cameraPosition.y = lookAtTarget.y + findY();
-    //cameraPosition.z = lookAtTarget.z + findZ();
-
-
     camera(
       findX(), findY(), findZ(),
       lookAtTarget.x, lookAtTarget.y, lookAtTarget.z,

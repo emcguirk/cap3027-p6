@@ -25,10 +25,10 @@ void setup()
   size(1200, 800, P3D);
  
   /*====== Load Animations ======*/
-  //monsterAnim = ReadAnimationFromFile("monster.txt");
+  monsterAnim = ReadAnimationFromFile("monster.txt");
   //sphereAnim = ReadAnimationFromFile("sphere.txt");
 
-  //monsterForward.SetAnimation(monsterAnim);
+  monsterForward.SetAnimation(monsterAnim);
   //monsterReverse.SetAnimation(monsterAnim);
   //monsterSnap.SetAnimation(monsterAnim);  
   //monsterSnap.SetFrameSnapping(true);
@@ -58,20 +58,17 @@ void draw()
   perspective(radians(90f), width/(float)height, 0.1, 1000);
   DrawGrid();
 
-  float playbackSpeed = 0.005f;
+  float playbackSpeed = 0.01f;
 
   oCamera.Update();
-  
-  monsterForward.UpdateTime(monsterForward.currentTime);
-  println(monsterForward.currentTime);
 
   /*====== Draw Forward Monster ======*/
-  //pushMatrix();
-  //translate(-40, 0, 0);
-  //monsterForward.fillColor = color(128, 200, 54);
-  //monsterForward.Update(playbackSpeed);
-  //shape(monsterForward.currentShape);
-  //popMatrix();
+  pushMatrix();
+  translate(-40, 0, 0);
+  monsterForward.fillColor = color(128, 200, 54);
+  monsterForward.Update(playbackSpeed);
+  shape(monsterForward.currentShape);
+  popMatrix();
   
   ///*====== Draw Reverse Monster ======*/
   //pushMatrix();
@@ -131,7 +128,7 @@ void mouseDragged() {
 // Create and return an animation object
 Animation ReadAnimationFromFile(String fileName)
 {
-  Animation animation = new Animation(); //<>//
+  Animation animation = new Animation();
 
   // The BufferedReader class will let you read in the file data
   String line;
