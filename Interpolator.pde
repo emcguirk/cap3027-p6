@@ -1,4 +1,4 @@
-abstract class Interpolator //<>// //<>//
+abstract class Interpolator
 {
   Animation animation;
 
@@ -67,7 +67,7 @@ class ShapeInterpolator extends Interpolator
     if (time > 0)
     {
       // Check if we're at the beginning
-      if (currentTime < animation.keyFrames.get(0).time) //<>//
+      if (currentTime < animation.keyFrames.get(0).time)
       {
         next = animation.keyFrames.get(0);
         prev = animation.keyFrames.get(animation.keyFrames.size()-1);
@@ -85,7 +85,7 @@ class ShapeInterpolator extends Interpolator
         }
       }
       // Create shape
-      ArrayList<PVector> verts = new ArrayList<>(); //<>//
+      ArrayList<PVector> verts = new ArrayList<>();
       for (int i = 0; i < prev.points.size(); i++)
       {
         if (snapping)
@@ -131,7 +131,7 @@ class ShapeInterpolator extends Interpolator
       // Create shape
       ArrayList<PVector> verts = new ArrayList<>();
       for (int i = 0; i < prev.points.size(); i++)
-      { //<>//
+      {
         if (snapping)
         {
           verts.add(new PVector(prev.points.get(i).x, prev.points.get(i).y, prev.points.get(i).z));

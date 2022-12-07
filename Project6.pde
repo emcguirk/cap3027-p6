@@ -1,4 +1,4 @@
-// VertexAnimation Project - Student Version
+// VertexAnimation Project - Student Version //<>//
 import java.io.*;
 import java.util.*;
 
@@ -16,6 +16,8 @@ PositionInterpolator spherePosition = new PositionInterpolator();
 
 // TODO: Create animations for interpolators
 ArrayList<PositionInterpolator> cubes = new ArrayList<PositionInterpolator>();
+
+ArrayList<Animation> cubeAnims = new ArrayList<Animation>();
 
 OrbitCamera oCamera;
 
@@ -48,7 +50,31 @@ void setup()
   
   oCamera = new OrbitCamera();
   
-
+  /*===== Create animation for cubes =====*/
+  for (int i = 0; i < 11; i++)
+  {
+    Animation cube = new Animation();
+    for (int j = 0; j < 4; j++)
+    {
+      KeyFrame kf = new KeyFrame();
+      float x = -100 + i * 20;
+      float y = 0;
+      float z;
+      if (j%2 == 0) z = 0;
+      else if (j == 1) z = -95;
+      else z = 95;
+      PVector pos = new PVector(x, y, z);
+      kf.points.add(pos);
+      kf.time = j * 0.5;
+      cube.keyFrames.add(kf);
+    }
+    cubeAnims.add(cube);
+  }
+  
+  for (Animation a : cubeAnims)
+  {
+    println(a.keyFrames.get(0).points.get(0).x, a.keyFrames.get(0).points.get(0).y, a.keyFrames.get(0).points.get(0).z);
+  }
 }
 
 void draw()
