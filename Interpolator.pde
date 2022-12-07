@@ -103,6 +103,7 @@ class ShapeInterpolator extends Interpolator
       currentShape = createShape();
       currentShape.beginShape(TRIANGLE);
       currentShape.fill(fillColor);
+      currentShape.noStroke();
       for (PVector v : verts)
       {
         currentShape.vertex(v.x, v.y, v.z);
@@ -130,8 +131,8 @@ class ShapeInterpolator extends Interpolator
       // Create shape
       ArrayList<PVector> verts = new ArrayList<>();
       for (int i = 0; i < prev.points.size(); i++)
-      {
-        if (snapping) //<>//
+      { //<>//
+        if (snapping)
         {
           verts.add(new PVector(prev.points.get(i).x, prev.points.get(i).y, prev.points.get(i).z));
         }
@@ -143,6 +144,8 @@ class ShapeInterpolator extends Interpolator
       }
       currentShape = createShape();
       currentShape.beginShape(TRIANGLE);
+      currentShape.fill(fillColor);
+      currentShape.noStroke();
       for (PVector v : verts)
       {
         currentShape.vertex(v.x, v.y, v.z);

@@ -26,14 +26,14 @@ void setup()
  
   /*====== Load Animations ======*/
   monsterAnim = ReadAnimationFromFile("monster.txt");
-  //sphereAnim = ReadAnimationFromFile("sphere.txt");
+  sphereAnim = ReadAnimationFromFile("sphere.txt");
 
   monsterForward.SetAnimation(monsterAnim);
   monsterReverse.SetAnimation(monsterAnim);
   monsterSnap.SetAnimation(monsterAnim);  
   monsterSnap.SetFrameSnapping(true);
 
-  //sphereForward.SetAnimation(sphereAnim);
+  sphereForward.SetAnimation(sphereAnim);
 
   /*====== Create Animations For Cubes ======*/
   // When initializing animations, to offset them
@@ -42,9 +42,9 @@ void setup()
   // ahead of the previous one
   
   /*====== Create Animations For Spheroid ======*/
-  //Animation spherePos = new Animation();
+  Animation spherePos = new Animation();
   // Create and set keyframes
-  //spherePosition.SetAnimation(spherePos);
+  spherePosition.SetAnimation(spherePos);
   
   oCamera = new OrbitCamera();
   
@@ -87,14 +87,14 @@ void draw()
   popMatrix();
   
   ///*====== Draw Spheroid ======*/
-  //spherePosition.Update(playbackSpeed);
-  //sphereForward.fillColor = color(39, 110, 190);
-  //sphereForward.Update(playbackSpeed);
-  //PVector pos = spherePosition.currentPosition;
-  //pushMatrix();
+  spherePosition.Update(playbackSpeed);
+  sphereForward.fillColor = color(39, 110, 190);
+  sphereForward.Update(playbackSpeed);
+  PVector pos = spherePosition.currentPosition;
+  pushMatrix();
   //translate(pos.x, pos.y, pos.z);
-  //shape(sphereForward.currentShape);
-  //popMatrix();
+  shape(sphereForward.currentShape);
+  popMatrix();
   
   /*====== TODO: Update and draw cubes ======*/
   // For each interpolator, update/draw
