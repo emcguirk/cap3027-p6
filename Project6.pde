@@ -42,7 +42,7 @@ void setup()
   // ahead of the previous one
   for (int i = 0; i < 11; i++)
   {
-    Animation cube = new Animation(); //<>//
+    Animation cube = new Animation();
     for (int j = 0; j < 4; j++)
     {
       KeyFrame kf = new KeyFrame();
@@ -54,25 +54,47 @@ void setup()
       else z = 95;
       PVector pos = new PVector(x, y, z);
       kf.points.add(pos);
-      kf.time = j * 0.5;
+      kf.time = (j+1) * 0.5;
       cube.keyFrames.add(kf);
     }
     PositionInterpolator cubeLerp = new PositionInterpolator();
     cubeLerp.SetAnimation(cube);
-    cubeLerp.Update(0.1 * i); //<>//
+    cubeLerp.Update(0.1 * i);
     cubes.add(cubeLerp);
   }
 
   /*====== Create Animations For Spheroid ======*/
   Animation spherePos = new Animation();
   // Create and set keyframes
-  spherePosition.SetAnimation(spherePos);
+  for (int i = 0; i < 4; i++)
+  {
+    KeyFrame kf = new KeyFrame();
+    kf.time = (float) (i+1);
+    PVector p;
+    switch (i)
+    {
+      case 0:
+        p = new PVector(-100, 0, 100);
+        break;
+      case 1:
+        p = new PVector(-100, 0, -100);
+        break;
+      case 2:
+        p = new PVector(100, 0, -100);
+        break;
+      default:
+        p = new PVector(100, 0, 100);
+    }
+    kf.points.add(p);
+    spherePos.keyFrames.add(kf);
+  }
+  spherePosition.SetAnimation(spherePos); //<>//
 
   oCamera = new OrbitCamera();
   
 }
 
-void draw() //<>//
+void draw()
 {
   lights();
   background(0);
@@ -108,22 +130,29 @@ void draw() //<>//
   popMatrix();
 
   ///*====== Draw Spheroid ======*/
-  //spherePosition.Update(playbackSpeed);
-  //sphereForward.fillColor = color(39, 110, 190);
-  //sphereForward.Update(playbackSpeed);
-  //PVector pos = spherePosition.currentPosition;
-  //pushMatrix();
-  ////translate(pos.x, pos.y, pos.z);
-  //shape(sphereForward.currentShape);
-  //popMatrix();
+  spherePosition.Update(playbackSpeed); //<>//
+  sphereForward.fillColor = color(39, 110, 190);
+  sphereForward.Update(playbackSpeed);
+  PVector pos = spherePosition.currentPosition;
+  pushMatrix();
+  translate(pos.x, pos.y, pos.z);
+  shape(sphereForward.currentShape);
+  popMatrix();
 
   /*====== TODO: Update and draw cubes ======*/
   for (int i = 0; i < cubes.size(); i++)
   {
     cubes.get(i).Update(playbackSpeed);
-    color c = (i%2 == 0) ? color(255, 0, 0) : color(255, 255, 0);
-    fill(c);
-    PVector pos = cubes.get(i).currentPosition;
+    if (i%2 == 0)
+    {
+      fill(255, 0, 0);
+    }
+    else
+    {
+      fill(255, 255, 0);
+      cubes.get(i).SetFrameSnapping(true);
+    }
+    pos = cubes.get(i).currentPosition;
     pushMatrix();
     translate(pos.x, pos.y, pos.z);
     box(10);
@@ -137,7 +166,7 @@ void mouseWheel(MouseEvent event)
 {
   float e = event.getCount();
   oCamera.Zoom(e);
-  // Zoom the camera
+  // Zoom the camera //<>//
   // SomeCameraClass.zoom(e);
 }
 
@@ -209,6 +238,6 @@ void DrawGrid()
   }
   stroke(255, 0, 0);
   line(-100, 0, 0, 100, 0, 0);
-  stroke(0, 255, 0);
+  stroke(0, 0, 255);
   line(0, 0, -100, 0, 0, 100);
 }

@@ -159,7 +159,7 @@ class PositionInterpolator extends Interpolator
 {
   PVector currentPosition;
 
-  void Update(float time) //<>//
+  void Update(float time)
   {
     // The same type of process as the ShapeInterpolator class... except
     // this only operates on a single point
@@ -167,19 +167,47 @@ class PositionInterpolator extends Interpolator
     KeyFrame prev = null;
     KeyFrame next = null;
     float ratio = 0;
-    for (int i = 0; i < animation.keyFrames.size(); i++)
+    if (snapping)
     {
-      if (currentTime >= animation.keyFrames.get(i).time && currentTime <= animation.keyFrames.get(i+1).time)
+      if (currentTime < animation.keyFrames.get(0).time)
       {
-        prev = animation.keyFrames.get(i);
-        next = animation.keyFrames.get(i+1);
-        ratio = abs(currentTime - prev.time)/abs(next.time - prev.time);
+        currentPosition = animation.keyFrames.get(0).points.get(0);
       }
+      else
+      {
+        for (int i = 1; i < animation.keyFrames.size(); i++)
+        {
+          if (currentTime >= animation.keyFrames.get(i-1).time && currentTime <= animation.keyFrames.get(i).time)
+          {
+            currentPosition = animation.keyFrames.get(i).points.get(0);
+          }
+        }
+      }
+    } 
+    else
+    {
+      if (currentTime < animation.keyFrames.get(0).time)
+      {
+        next = animation.keyFrames.get(0);
+        prev = animation.keyFrames.get(animation.keyFrames.size()-1);
+        ratio = currentTime/abs(next.time);
+      } else
+      {
+        for (int i = 0; i < animation.keyFrames.size(); i++)
+        {
+          if (currentTime >= animation.keyFrames.get(i).time && currentTime <= animation.keyFrames.get(i+1).time)
+          {
+            prev = animation.keyFrames.get(i);
+            next = animation.keyFrames.get(i+1);
+            ratio = abs(currentTime - prev.time)/abs(next.time - prev.time);
+          }
+        }
+      }
+      float x, y, z;
+      x = lerp(prev.points.get(0).x, next.points.get(0).x, ratio);
+      y = 0;
+      z = lerp(prev.points.get(0).z, next.points.get(0).z, ratio);
+      currentPosition = new PVector(x, y, z);
     }
-    float x, y, z;
-    x = lerp(prev.points.get(0).x, next.points.get(0).x, ratio);
-    y = 0;
-    z = lerp(prev.points.get(0).z, next.points.get(0).z, ratio);
-    currentPosition = new PVector(x, y, z);
   }
 }
